@@ -2,9 +2,7 @@
     <div>
         <h2>To Do List</h2>
 
-        <h1>{{ toDoLists }}</h1>
-
-        <div class="card card-body" v-for="toDoList in toDoLists" v-bind:key="toDoList.id">
+        <div class="card card-body" v-for="toDoList in toDoLists" :key="toDoList.id">
             <h3>{{ toDoList.title }}</h3>
             <p>{{ toDoList.description }}</p>
             <p>{{ toDoList.date_time }}</p>
@@ -18,7 +16,6 @@
 export default {
     data() {
         return {
-            hello: [],
             toDoLists: [],
             edit: false,
         };
@@ -39,9 +36,9 @@ export default {
             fetch('api/to-do-lists', { headers })
             .then(res => res.json())
             .then(res => {
-                this.toDoLists = res;
+                self.toDoLists = res.data;
 
-                console.log(res);
+                console.log(self.toDoLists);
             })
             .catch(err => console.log(err))
         }

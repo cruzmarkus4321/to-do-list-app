@@ -1922,12 +1922,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      hello: [],
       toDoLists: [],
       edit: false
     };
@@ -1937,8 +1934,6 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     fetchToDoLists: function fetchToDoLists() {
-      var _this = this;
-
       var self = this;
       var headers = {
         "Content-Type": "application/json",
@@ -1950,8 +1945,8 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (res) {
         return res.json();
       }).then(function (res) {
-        _this.toDoLists = res;
-        console.log(res);
+        self.toDoLists = res.data;
+        console.log(self.toDoLists);
       })["catch"](function (err) {
         return console.log(err);
       });
@@ -37550,8 +37545,6 @@ var render = function() {
     [
       _c("h2", [_vm._v("To Do List")]),
       _vm._v(" "),
-      _c("h1", [_vm._v(_vm._s(_vm.toDoLists))]),
-      _vm._v(" "),
       _vm._l(_vm.toDoLists, function(toDoList) {
         return _c("div", { key: toDoList.id, staticClass: "card card-body" }, [
           _c("h3", [_vm._v(_vm._s(toDoList.title))]),
@@ -49960,8 +49953,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\Users\Markus\Desktop\Projects\To Do List App\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\Users\Markus\Desktop\Projects\To Do List App\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Users\Markus\Desktop\to-do-list-app\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Users\Markus\Desktop\to-do-list-app\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
