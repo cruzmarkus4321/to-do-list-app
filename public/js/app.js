@@ -1908,6 +1908,37 @@ module.exports = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -1926,6 +1957,14 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       toDoLists: [],
+      toDoList: {
+        id: '',
+        title: '',
+        description: '',
+        date_time: '',
+        username: ''
+      },
+      toDoList_id: '',
       edit: false
     };
   },
@@ -1934,7 +1973,8 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     fetchToDoLists: function fetchToDoLists() {
-      var self = this;
+      var _this = this;
+
       var headers = {
         "Content-Type": "application/json",
         "Accept": "application/json",
@@ -1945,11 +1985,103 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (res) {
         return res.json();
       }).then(function (res) {
-        self.toDoLists = res.data;
-        console.log(self.toDoLists);
+        _this.toDoLists = res.data;
+        console.log(_this.toDoLists);
       })["catch"](function (err) {
         return console.log(err);
       });
+    },
+    addToDoList: function addToDoList() {
+      var _this2 = this;
+
+      var headers = {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiNmRhMWUyY2IzZjEyZDM4YmQ1NzY3YmNmNWZmZmYyNzU0ZDc3ZjNlMTdmNDY1MTcxY2NiNmVkMGNjZDIwMGIyMGM3NmZiMjc2MTU3NWZlMmYiLCJpYXQiOjE1OTQwMjQwNzksIm5iZiI6MTU5NDAyNDA3OSwiZXhwIjoxNjI1NTYwMDc5LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.jjYEqIhZzxHqZHOi_Nbjo6NZ0W-_ESAwTselAbophfpXlp3f893q4zo4NLGd-E8V2_jEvgUdN5i0yYfrGT3FCCi1j1cAfFMQSNQjCuK-RHx4kDxdwmEIsleouqdX1P-m9hXtw_D0-EOe_QJvHHjAPXI1leViXfFEg-2XDkqCdGvGREjkOLdtRQsr7hlsD60egENFrPOQMKaL_V6NW8eI9PsLc-DVnDyEDNOmAQ_D1di0Rk9xk8yIdB744IbPq5-ZPvQuGe9aeBKdR7egzBuVxtdszc513fFBHKtw9AHpQt6gS2og-AsfEY8dwXjTiYMG2HPDqo-dAyMFvP6BOihzISKC2h5jU85-drUQXZzJQeBjrM-VE5BGXZ1WyoiRyH7C3laHO0exd_0E_BESAD0ZVUwt_Ed7pa6gm-lIBGpd1s0btwLSjR6RWau9dH4c4WGfxdiBbUS1ib-ULOnmW-rNTEsXU25UV5QjTdqqX4cfxlW2yNqv_woKYyd3XMMmHqrogm09YHxxAnisWxebRZga1Vr4NN7_BrOyrNoUHUlfH_MzKBQE9Iqfl2CY0oo-CgcvnuRsyBjFioF1sYv36-ACNIJyoC2Yf-YD_VB086AYiiBc9BMlZMroIJO2eoJqHH6lo3f_q5-nTTgumwZKeiIpvj4oniblZTZvoKJEmHdjLzU"
+      };
+
+      if (this.edit == false) {
+        //add
+        fetch('api/to-do-lists', {
+          method: 'post',
+          headers: headers,
+          body: JSON.stringify(this.toDoList)
+        }).then(function (res) {
+          return res.json();
+        }).then(function (res) {
+          alert('To do list successfully added.');
+          _this2.toDoList.title = '';
+          _this2.toDoList.description = '';
+          _this2.toDoList.date_time = '';
+
+          _this2.fetchToDoLists();
+        })["catch"](function (err) {
+          return console.log(err);
+        });
+      } else {
+        //update
+        var url = new URL("http://localhost:8000/api/to-do-lists/".concat(this.toDoList.id));
+        var params = {
+          title: this.toDoList.title,
+          description: this.toDoList.description,
+          date_time: this.toDoList.date_time
+        };
+        Object.entries(params).forEach(function (_ref) {
+          var _ref2 = _slicedToArray(_ref, 2),
+              k = _ref2[0],
+              v = _ref2[1];
+
+          return url.searchParams.append(k, v);
+        });
+        console.log(url);
+        fetch(url, {
+          method: 'put',
+          headers: headers
+        }).then(function (res) {
+          return res.json();
+        }).then(function (res) {
+          alert('To do list successfully updated.');
+          _this2.toDoList.title = '';
+          _this2.toDoList.description = '';
+          _this2.toDoList.date_time = '';
+
+          _this2.fetchToDoLists();
+        })["catch"](function (err) {
+          return console.log(err);
+        });
+      }
+    },
+    editToDoList: function editToDoList(toDoList) {
+      this.edit = true;
+      this.toDoList.id = toDoList.id;
+      this.toDoList.toDoList_id = toDoList.id;
+      this.toDoList.title = toDoList.title;
+      this.toDoList.description = toDoList.description;
+      this.toDoList.date_time = toDoList.date_time;
+    },
+    deleteToDoList: function deleteToDoList(id) {
+      var _this3 = this;
+
+      var headers = {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiNmRhMWUyY2IzZjEyZDM4YmQ1NzY3YmNmNWZmZmYyNzU0ZDc3ZjNlMTdmNDY1MTcxY2NiNmVkMGNjZDIwMGIyMGM3NmZiMjc2MTU3NWZlMmYiLCJpYXQiOjE1OTQwMjQwNzksIm5iZiI6MTU5NDAyNDA3OSwiZXhwIjoxNjI1NTYwMDc5LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.jjYEqIhZzxHqZHOi_Nbjo6NZ0W-_ESAwTselAbophfpXlp3f893q4zo4NLGd-E8V2_jEvgUdN5i0yYfrGT3FCCi1j1cAfFMQSNQjCuK-RHx4kDxdwmEIsleouqdX1P-m9hXtw_D0-EOe_QJvHHjAPXI1leViXfFEg-2XDkqCdGvGREjkOLdtRQsr7hlsD60egENFrPOQMKaL_V6NW8eI9PsLc-DVnDyEDNOmAQ_D1di0Rk9xk8yIdB744IbPq5-ZPvQuGe9aeBKdR7egzBuVxtdszc513fFBHKtw9AHpQt6gS2og-AsfEY8dwXjTiYMG2HPDqo-dAyMFvP6BOihzISKC2h5jU85-drUQXZzJQeBjrM-VE5BGXZ1WyoiRyH7C3laHO0exd_0E_BESAD0ZVUwt_Ed7pa6gm-lIBGpd1s0btwLSjR6RWau9dH4c4WGfxdiBbUS1ib-ULOnmW-rNTEsXU25UV5QjTdqqX4cfxlW2yNqv_woKYyd3XMMmHqrogm09YHxxAnisWxebRZga1Vr4NN7_BrOyrNoUHUlfH_MzKBQE9Iqfl2CY0oo-CgcvnuRsyBjFioF1sYv36-ACNIJyoC2Yf-YD_VB086AYiiBc9BMlZMroIJO2eoJqHH6lo3f_q5-nTTgumwZKeiIpvj4oniblZTZvoKJEmHdjLzU"
+      };
+
+      if (confirm('Are you sure? ')) {
+        fetch("api/to-do-lists/".concat(id), {
+          method: 'delete',
+          headers: headers
+        }).then(function (res) {
+          return res.json();
+        }).then(function (res) {
+          alert('To do list removed.');
+
+          _this3.fetchToDoLists();
+        })["catch"](function (err) {
+          return console.log(err);
+        });
+      }
     }
   }
 });
@@ -37543,7 +37675,102 @@ var render = function() {
   return _c(
     "div",
     [
-      _c("h2", [_vm._v("To Do List")]),
+      _c("h2", [_vm._v("To Do Lists")]),
+      _vm._v(" "),
+      _c(
+        "form",
+        {
+          staticClass: "mb-3",
+          on: {
+            submit: function($event) {
+              $event.preventDefault()
+              return _vm.addToDoList($event)
+            }
+          }
+        },
+        [
+          _c("div", { staticClass: "form-group" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.toDoList.title,
+                  expression: "toDoList.title"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: { type: "text", placeholder: "Title" },
+              domProps: { value: _vm.toDoList.title },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.toDoList, "title", $event.target.value)
+                }
+              }
+            })
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-group" }, [
+            _c("textarea", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.toDoList.description,
+                  expression: "toDoList.description"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: { type: "text", placeholder: "Description" },
+              domProps: { value: _vm.toDoList.description },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.toDoList, "description", $event.target.value)
+                }
+              }
+            })
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-group" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.toDoList.date_time,
+                  expression: "toDoList.date_time"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: { type: "text", placeholder: "Date and Time" },
+              domProps: { value: _vm.toDoList.date_time },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.toDoList, "date_time", $event.target.value)
+                }
+              }
+            })
+          ]),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-light btn-block",
+              attrs: { type: "submit" }
+            },
+            [_vm._v("Save")]
+          )
+        ]
+      ),
       _vm._v(" "),
       _vm._l(_vm.toDoLists, function(toDoList) {
         return _c("div", { key: toDoList.id, staticClass: "card card-body" }, [
@@ -37553,7 +37780,35 @@ var render = function() {
           _vm._v(" "),
           _c("p", [_vm._v(_vm._s(toDoList.date_time))]),
           _vm._v(" "),
-          _c("p", [_vm._v(_vm._s(toDoList.username))])
+          _c("p", [_vm._v(_vm._s(toDoList.username))]),
+          _vm._v(" "),
+          _c("hr"),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-warning mb-2",
+              on: {
+                click: function($event) {
+                  return _vm.editToDoList(toDoList)
+                }
+              }
+            },
+            [_vm._v("Edit")]
+          ),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-danger",
+              on: {
+                click: function($event) {
+                  return _vm.deleteToDoList(toDoList.id)
+                }
+              }
+            },
+            [_vm._v("Delete")]
+          )
         ])
       })
     ],
@@ -49870,14 +50125,15 @@ __webpack_require__.r(__webpack_exports__);
 /*!***********************************************!*\
   !*** ./resources/js/components/ToDoLists.vue ***!
   \***********************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ToDoLists_vue_vue_type_template_id_3f3f8974___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ToDoLists.vue?vue&type=template&id=3f3f8974& */ "./resources/js/components/ToDoLists.vue?vue&type=template&id=3f3f8974&");
 /* harmony import */ var _ToDoLists_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ToDoLists.vue?vue&type=script&lang=js& */ "./resources/js/components/ToDoLists.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _ToDoLists_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _ToDoLists_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -49907,7 +50163,7 @@ component.options.__file = "resources/js/components/ToDoLists.vue"
 /*!************************************************************************!*\
   !*** ./resources/js/components/ToDoLists.vue?vue&type=script&lang=js& ***!
   \************************************************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -49953,8 +50209,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\Users\Markus\Desktop\to-do-list-app\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\Users\Markus\Desktop\to-do-list-app\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Users\Markus\Desktop\Projects\to-do-list-app\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Users\Markus\Desktop\Projects\to-do-list-app\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

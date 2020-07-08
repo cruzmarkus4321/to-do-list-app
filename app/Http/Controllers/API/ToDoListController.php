@@ -19,7 +19,7 @@ class ToDoListController extends BaseController
      */
     public function index()
     {
-        $toDoLists = ToDoList::all();
+        $toDoLists = ToDoList::orderBy('created_at', 'desc')->get();
     
         return $this->sendResponse(ToDoListResource::collection($toDoLists), 'To do lists retrieved successfully.');
     }
