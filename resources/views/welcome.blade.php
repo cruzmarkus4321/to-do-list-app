@@ -19,11 +19,10 @@
 
 <body>
     <div id="app">
-        <navbar></navbar>
         <div class="container">
-            <to-do-lists>
-
-            </to-do-lists>
+            <app>
+                
+            </app>
         </div>
     </div>
 </body>

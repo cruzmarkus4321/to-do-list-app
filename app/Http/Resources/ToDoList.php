@@ -19,7 +19,7 @@ class ToDoList extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'description' => $this->description,
-            'date_time' => Carbon::parse($this->date_time)->format('d/m/Y h:iA'),
+            'date_time' => $this->date_time,
             'username' => $this->username,
         ];
     }
