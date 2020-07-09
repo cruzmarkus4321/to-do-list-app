@@ -26,11 +26,6 @@ Vue.component(
 );
 
 /* Vue.component(
-    'navbar',
-    require('./components/NavBar.vue').default
-);
-
-Vue.component(
     'register',
     require('./components/Register.vue').default
 );

@@ -1923,6 +1923,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
     navbar: _NavBar_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
+  created: function created() {
+    if (!sessionStorage.getItem("user")) {
+      this.$router.push("./login");
+    } else {
+      this.$router.push("./to-do-lists");
+    }
   }
 });
 
@@ -1954,14 +1961,42 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       user: {
-        email: '',
-        password: ''
+        email: "",
+        password: ""
       }
     };
+  },
+  created: function created() {
+    if (localStorage.getItem("user")) {
+      this.$router.push("./to-do-lists");
+    }
   },
   methods: {
     login: function login() {
@@ -1969,22 +2004,117 @@ __webpack_require__.r(__webpack_exports__);
 
       var headers = {
         "Content-Type": "application/json",
-        "Accept": "application/json"
+        Accept: "application/json"
       };
-      fetch('api/login', {
-        method: 'post',
+      fetch("api/login", {
+        method: "post",
         headers: headers,
         body: JSON.stringify(this.user)
       }).then(function (res) {
         return res.json();
       }).then(function (res) {
-        localStorage.clear();
-        localStorage.setItem('user', JSON.stringify(res.data));
+        if (res.success) {
+          localStorage.clear();
+          localStorage.setItem("user", JSON.stringify(res.data));
 
-        _this.$router.push('./to-do-lists');
+          _this.$router.push("./to-do-lists");
+        } else {
+          alert('Incorrect email or password');
+        }
       })["catch"](function (err) {
         return console.log(err);
       });
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/NavBar.vue?vue&type=script&lang=js&":
+/*!*****************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/NavBar.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      user: {
+        email: "",
+        password: ""
+      },
+      isLoggedIn: false,
+      username: ""
+    };
+  },
+  created: function created() {
+    this.checkIfLoggedIn();
+  },
+  methods: {
+    logout: function logout() {
+      localStorage.clear();
+      this.$router.push("./login");
+      this.isLoggedIn = false;
+    },
+    checkIfLoggedIn: function checkIfLoggedIn() {
+      if (localStorage.getItem("user")) {
+        this.isLoggedIn = true;
+        var user = JSON.parse(localStorage.getItem("user"));
+        this.username = user.name;
+      }
     }
   }
 });
@@ -2023,32 +2153,75 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       user: {
-        name: '',
-        email: '',
-        password: '',
-        c_password: ''
+        name: "",
+        email: "",
+        password: "",
+        c_password: ""
       }
     };
   },
+  created: function created() {
+    if (localStorage.getItem("user")) {
+      this.$router.push("./to-do-lists");
+    }
+  },
   methods: {
     register: function register() {
+      var _this = this;
+
       var headers = {
         "Content-Type": "application/json",
-        "Accept": "application/json"
+        Accept: "application/json"
       };
-      fetch('api/register', {
-        method: 'post',
+      fetch("api/register", {
+        method: "post",
         headers: headers,
         body: JSON.stringify(this.user)
       }).then(function (res) {
         return res.json();
       }).then(function (res) {
-        alert('User registered successfully.');
-        console.log(res.data);
+        alert("User registered successfully.");
+        localStorage.clear();
+        localStorage.setItem("user", JSON.stringify(res.data));
+
+        _this.$router.push("./to-do-lists");
       })["catch"](function (err) {
         return console.log(err);
       });
@@ -2137,6 +2310,23 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2149,14 +2339,16 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
         username: ""
       },
       toDoList_id: "",
-      edit: false
+      edit: false,
+      token: ''
     };
   },
   created: function created() {
     if (!localStorage.getItem("user")) {
       this.$router.push("./login");
     } else {
-      var user = localStorage.getItem("user");
+      var user = JSON.parse(localStorage.getItem("user"));
+      this.token = user.token;
     }
 
     this.fetchToDoLists();
@@ -2168,7 +2360,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
       var headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
-        Authorization: "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiNmRhMWUyY2IzZjEyZDM4YmQ1NzY3YmNmNWZmZmYyNzU0ZDc3ZjNlMTdmNDY1MTcxY2NiNmVkMGNjZDIwMGIyMGM3NmZiMjc2MTU3NWZlMmYiLCJpYXQiOjE1OTQwMjQwNzksIm5iZiI6MTU5NDAyNDA3OSwiZXhwIjoxNjI1NTYwMDc5LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.jjYEqIhZzxHqZHOi_Nbjo6NZ0W-_ESAwTselAbophfpXlp3f893q4zo4NLGd-E8V2_jEvgUdN5i0yYfrGT3FCCi1j1cAfFMQSNQjCuK-RHx4kDxdwmEIsleouqdX1P-m9hXtw_D0-EOe_QJvHHjAPXI1leViXfFEg-2XDkqCdGvGREjkOLdtRQsr7hlsD60egENFrPOQMKaL_V6NW8eI9PsLc-DVnDyEDNOmAQ_D1di0Rk9xk8yIdB744IbPq5-ZPvQuGe9aeBKdR7egzBuVxtdszc513fFBHKtw9AHpQt6gS2og-AsfEY8dwXjTiYMG2HPDqo-dAyMFvP6BOihzISKC2h5jU85-drUQXZzJQeBjrM-VE5BGXZ1WyoiRyH7C3laHO0exd_0E_BESAD0ZVUwt_Ed7pa6gm-lIBGpd1s0btwLSjR6RWau9dH4c4WGfxdiBbUS1ib-ULOnmW-rNTEsXU25UV5QjTdqqX4cfxlW2yNqv_woKYyd3XMMmHqrogm09YHxxAnisWxebRZga1Vr4NN7_BrOyrNoUHUlfH_MzKBQE9Iqfl2CY0oo-CgcvnuRsyBjFioF1sYv36-ACNIJyoC2Yf-YD_VB086AYiiBc9BMlZMroIJO2eoJqHH6lo3f_q5-nTTgumwZKeiIpvj4oniblZTZvoKJEmHdjLzU"
+        Authorization: "Bearer ".concat(this.token)
       };
       fetch("api/to-do-lists", {
         headers: headers
@@ -2176,7 +2368,6 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
         return res.json();
       }).then(function (res) {
         _this.toDoLists = res.data;
-        console.log(_this.toDoLists);
       })["catch"](function (err) {
         return console.log(err);
       });
@@ -2187,7 +2378,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
       var headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
-        Authorization: "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiNmRhMWUyY2IzZjEyZDM4YmQ1NzY3YmNmNWZmZmYyNzU0ZDc3ZjNlMTdmNDY1MTcxY2NiNmVkMGNjZDIwMGIyMGM3NmZiMjc2MTU3NWZlMmYiLCJpYXQiOjE1OTQwMjQwNzksIm5iZiI6MTU5NDAyNDA3OSwiZXhwIjoxNjI1NTYwMDc5LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.jjYEqIhZzxHqZHOi_Nbjo6NZ0W-_ESAwTselAbophfpXlp3f893q4zo4NLGd-E8V2_jEvgUdN5i0yYfrGT3FCCi1j1cAfFMQSNQjCuK-RHx4kDxdwmEIsleouqdX1P-m9hXtw_D0-EOe_QJvHHjAPXI1leViXfFEg-2XDkqCdGvGREjkOLdtRQsr7hlsD60egENFrPOQMKaL_V6NW8eI9PsLc-DVnDyEDNOmAQ_D1di0Rk9xk8yIdB744IbPq5-ZPvQuGe9aeBKdR7egzBuVxtdszc513fFBHKtw9AHpQt6gS2og-AsfEY8dwXjTiYMG2HPDqo-dAyMFvP6BOihzISKC2h5jU85-drUQXZzJQeBjrM-VE5BGXZ1WyoiRyH7C3laHO0exd_0E_BESAD0ZVUwt_Ed7pa6gm-lIBGpd1s0btwLSjR6RWau9dH4c4WGfxdiBbUS1ib-ULOnmW-rNTEsXU25UV5QjTdqqX4cfxlW2yNqv_woKYyd3XMMmHqrogm09YHxxAnisWxebRZga1Vr4NN7_BrOyrNoUHUlfH_MzKBQE9Iqfl2CY0oo-CgcvnuRsyBjFioF1sYv36-ACNIJyoC2Yf-YD_VB086AYiiBc9BMlZMroIJO2eoJqHH6lo3f_q5-nTTgumwZKeiIpvj4oniblZTZvoKJEmHdjLzU"
+        Authorization: "Bearer ".concat(this.token)
       };
 
       if (this.edit == false) {
@@ -2255,7 +2446,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
       var headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
-        Authorization: "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiNmRhMWUyY2IzZjEyZDM4YmQ1NzY3YmNmNWZmZmYyNzU0ZDc3ZjNlMTdmNDY1MTcxY2NiNmVkMGNjZDIwMGIyMGM3NmZiMjc2MTU3NWZlMmYiLCJpYXQiOjE1OTQwMjQwNzksIm5iZiI6MTU5NDAyNDA3OSwiZXhwIjoxNjI1NTYwMDc5LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.jjYEqIhZzxHqZHOi_Nbjo6NZ0W-_ESAwTselAbophfpXlp3f893q4zo4NLGd-E8V2_jEvgUdN5i0yYfrGT3FCCi1j1cAfFMQSNQjCuK-RHx4kDxdwmEIsleouqdX1P-m9hXtw_D0-EOe_QJvHHjAPXI1leViXfFEg-2XDkqCdGvGREjkOLdtRQsr7hlsD60egENFrPOQMKaL_V6NW8eI9PsLc-DVnDyEDNOmAQ_D1di0Rk9xk8yIdB744IbPq5-ZPvQuGe9aeBKdR7egzBuVxtdszc513fFBHKtw9AHpQt6gS2og-AsfEY8dwXjTiYMG2HPDqo-dAyMFvP6BOihzISKC2h5jU85-drUQXZzJQeBjrM-VE5BGXZ1WyoiRyH7C3laHO0exd_0E_BESAD0ZVUwt_Ed7pa6gm-lIBGpd1s0btwLSjR6RWau9dH4c4WGfxdiBbUS1ib-ULOnmW-rNTEsXU25UV5QjTdqqX4cfxlW2yNqv_woKYyd3XMMmHqrogm09YHxxAnisWxebRZga1Vr4NN7_BrOyrNoUHUlfH_MzKBQE9Iqfl2CY0oo-CgcvnuRsyBjFioF1sYv36-ACNIJyoC2Yf-YD_VB086AYiiBc9BMlZMroIJO2eoJqHH6lo3f_q5-nTTgumwZKeiIpvj4oniblZTZvoKJEmHdjLzU"
+        Authorization: "Bearer ".concat(this.token)
       };
 
       if (confirm("Are you sure? ")) {
@@ -37824,7 +38015,7 @@ var render = function() {
   return _c(
     "main",
     [
-      _c("navbar"),
+      _c("navbar", { key: _vm.$route.fullPath }),
       _vm._v(" "),
       _c("div", { attrs: { id: "content-wrapper" } }, [_c("router-view")], 1)
     ],
@@ -37853,76 +38044,91 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("h2", [_vm._v("Login")]),
-    _vm._v(" "),
-    _c(
-      "form",
-      {
-        staticClass: "mb-3",
-        on: {
-          submit: function($event) {
-            $event.preventDefault()
-            return _vm.login($event)
-          }
-        }
-      },
-      [
-        _c("div", { staticClass: "form-group" }, [
-          _c("input", {
-            directives: [
+  return _c("div", { staticClass: "container" }, [
+    _c("div", { staticClass: "row justify-content-center" }, [
+      _c("div", { staticClass: "col-md-6" }, [
+        _c("div", { staticClass: "card" }, [
+          _c("div", { staticClass: "card-header" }, [_vm._v("Login")]),
+          _vm._v(" "),
+          _c("div", { staticClass: "card-body" }, [
+            _c(
+              "form",
               {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.user.email,
-                expression: "user.email"
-              }
-            ],
-            staticClass: "form-control",
-            attrs: { type: "text", placeholder: "Email" },
-            domProps: { value: _vm.user.email },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
+                staticClass: "mb-3",
+                on: {
+                  submit: function($event) {
+                    $event.preventDefault()
+                    return _vm.login($event)
+                  }
                 }
-                _vm.$set(_vm.user, "email", $event.target.value)
-              }
-            }
-          })
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-group" }, [
-          _c("input", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.user.password,
-                expression: "user.password"
-              }
-            ],
-            staticClass: "form-control",
-            attrs: { type: "password", placeholder: "Password" },
-            domProps: { value: _vm.user.password },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.$set(_vm.user, "password", $event.target.value)
-              }
-            }
-          })
-        ]),
-        _vm._v(" "),
-        _c(
-          "button",
-          { staticClass: "btn btn-light btn-block", attrs: { type: "submit" } },
-          [_vm._v("Login")]
-        )
-      ]
-    )
+              },
+              [
+                _c("div", { staticClass: "form-group" }, [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.user.email,
+                        expression: "user.email"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "text", placeholder: "Email" },
+                    domProps: { value: _vm.user.email },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.user, "email", $event.target.value)
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group" }, [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.user.password,
+                        expression: "user.password"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "password", placeholder: "Password" },
+                    domProps: { value: _vm.user.password },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.user, "password", $event.target.value)
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-light btn-block",
+                    attrs: { type: "submit" }
+                  },
+                  [
+                    _vm._v(
+                      "\n                            Login\n                        "
+                    )
+                  ]
+                )
+              ]
+            )
+          ])
+        ])
+      ])
+    ])
   ])
 }
 var staticRenderFns = []
@@ -37947,36 +38153,95 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c(
+    "nav",
+    { staticClass: "navbar navbar-expand-sm navbar-dark bg-info mb-2" },
+    [
+      _c("div", { staticClass: "container" }, [
+        _c("a", { staticClass: "navbar-brand", attrs: { href: "#" } }, [
+          _vm._v("To Do List App")
+        ]),
+        _vm._v(" "),
+        _vm.isLoggedIn
+          ? _c("div", [
+              _c("ul", { staticClass: "navbar-nav ml-auto" }, [
+                _c("li", { staticClass: "nav-item dropdown" }, [
+                  _c(
+                    "a",
+                    {
+                      staticClass: "nav-link dropdown-toggle",
+                      attrs: {
+                        id: "navbarDropdown",
+                        href: "#",
+                        role: "button",
+                        "data-toggle": "dropdown",
+                        "aria-haspopup": "true",
+                        "aria-expanded": "false"
+                      }
+                    },
+                    [
+                      _vm._v(
+                        "\n                        " +
+                          _vm._s(_vm.username) +
+                          " "
+                      ),
+                      _c("span", { staticClass: "caret" })
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass: "dropdown-menu dropdown-menu-right",
+                      attrs: { "aria-labelledby": "navbarDropdown" }
+                    },
+                    [
+                      _c(
+                        "a",
+                        {
+                          staticClass: "dropdown-item",
+                          attrs: { href: "#" },
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.logout($event)
+                            }
+                          }
+                        },
+                        [
+                          _vm._v(
+                            "\n                            Logout\n                        "
+                          )
+                        ]
+                      )
+                    ]
+                  )
+                ])
+              ])
+            ])
+          : _c("div", [_vm._m(0)])
+      ])
+    ]
+  )
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c(
-      "nav",
-      { staticClass: "navbar navbar-expand-sm navbar-dark bg-info mb-2" },
-      [
-        _c("div", { staticClass: "container" }, [
-          _c("a", { staticClass: "navbar-brand", attrs: { href: "#" } }, [
-            _vm._v("To Do List App")
-          ])
-        ]),
-        _vm._v(" "),
-        _c("li", { staticClass: "nav-item" }, [
-          _c("a", { staticClass: "nav-link", attrs: { href: "" } }, [
-            _vm._v("Login")
-          ])
-        ]),
-        _vm._v(" "),
-        _c("li", { staticClass: "nav-item" }, [
-          _c("a", { staticClass: "nav-link", attrs: { href: "" } }, [
-            _vm._v("Register")
-          ])
+    return _c("ul", { staticClass: "navbar-nav ml-auto" }, [
+      _c("li", { staticClass: "nav-item" }, [
+        _c("a", { staticClass: "nav-link", attrs: { href: "./#/login" } }, [
+          _vm._v("Login")
         ])
-      ]
-    )
+      ]),
+      _vm._v(" "),
+      _c("li", { staticClass: "nav-item" }, [
+        _c("a", { staticClass: "nav-link", attrs: { href: "./#/register" } }, [
+          _vm._v("Register")
+        ])
+      ])
+    ])
   }
 ]
 render._withStripped = true
@@ -38000,124 +38265,142 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("h2", [_vm._v("Registration")]),
-    _vm._v(" "),
-    _c(
-      "form",
-      {
-        staticClass: "mb-3",
-        on: {
-          submit: function($event) {
-            $event.preventDefault()
-            return _vm.register($event)
-          }
-        }
-      },
-      [
-        _c("div", { staticClass: "form-group" }, [
-          _c("input", {
-            directives: [
+  return _c("div", { staticClass: "container" }, [
+    _c("div", { staticClass: "row justify-content-center" }, [
+      _c("div", { staticClass: "col-md-6" }, [
+        _c("div", { staticClass: "card" }, [
+          _c("div", { staticClass: "card-header" }, [_vm._v("Registration")]),
+          _vm._v(" "),
+          _c("div", { staticClass: "card-body" }, [
+            _c(
+              "form",
               {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.user.name,
-                expression: "user.name"
-              }
-            ],
-            staticClass: "form-control",
-            attrs: { type: "text", placeholder: "Name" },
-            domProps: { value: _vm.user.name },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
+                staticClass: "mb-3",
+                on: {
+                  submit: function($event) {
+                    $event.preventDefault()
+                    return _vm.register($event)
+                  }
                 }
-                _vm.$set(_vm.user, "name", $event.target.value)
-              }
-            }
-          })
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-group" }, [
-          _c("input", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.user.email,
-                expression: "user.email"
-              }
-            ],
-            staticClass: "form-control",
-            attrs: { type: "text", placeholder: "Email" },
-            domProps: { value: _vm.user.email },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.$set(_vm.user, "email", $event.target.value)
-              }
-            }
-          })
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-group" }, [
-          _c("input", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.user.password,
-                expression: "user.password"
-              }
-            ],
-            staticClass: "form-control",
-            attrs: { type: "password", placeholder: "Password" },
-            domProps: { value: _vm.user.password },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.$set(_vm.user, "password", $event.target.value)
-              }
-            }
-          })
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-group" }, [
-          _c("input", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.user.c_password,
-                expression: "user.c_password"
-              }
-            ],
-            staticClass: "form-control",
-            attrs: { type: "password", placeholder: "Confirm Password" },
-            domProps: { value: _vm.user.c_password },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.$set(_vm.user, "c_password", $event.target.value)
-              }
-            }
-          })
-        ]),
-        _vm._v(" "),
-        _c(
-          "button",
-          { staticClass: "btn btn-light btn-block", attrs: { type: "submit" } },
-          [_vm._v("Register")]
-        )
-      ]
-    )
+              },
+              [
+                _c("div", { staticClass: "form-group" }, [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.user.name,
+                        expression: "user.name"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "text", placeholder: "Name" },
+                    domProps: { value: _vm.user.name },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.user, "name", $event.target.value)
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group" }, [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.user.email,
+                        expression: "user.email"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "text", placeholder: "Email" },
+                    domProps: { value: _vm.user.email },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.user, "email", $event.target.value)
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group" }, [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.user.password,
+                        expression: "user.password"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "password", placeholder: "Password" },
+                    domProps: { value: _vm.user.password },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.user, "password", $event.target.value)
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group" }, [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.user.c_password,
+                        expression: "user.c_password"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: {
+                      type: "password",
+                      placeholder: "Confirm Password"
+                    },
+                    domProps: { value: _vm.user.c_password },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.user, "c_password", $event.target.value)
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-light btn-block",
+                    attrs: { type: "submit" }
+                  },
+                  [
+                    _vm._v(
+                      "\n                            Register\n                        "
+                    )
+                  ]
+                )
+              ]
+            )
+          ])
+        ])
+      ])
+    ])
   ])
 }
 var staticRenderFns = []
@@ -38142,148 +38425,185 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    [
-      _c("h4", [_vm._v("To Do Lists")]),
-      _vm._v(" "),
-      _c(
-        "form",
-        {
-          staticClass: "mb-3",
-          on: {
-            submit: function($event) {
-              $event.preventDefault()
-              return _vm.addToDoList($event)
-            }
-          }
-        },
-        [
-          _c("div", { staticClass: "form-group" }, [
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.toDoList.title,
-                  expression: "toDoList.title"
-                }
-              ],
-              staticClass: "form-control",
-              attrs: { type: "text", placeholder: "Title" },
-              domProps: { value: _vm.toDoList.title },
-              on: {
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
-                  }
-                  _vm.$set(_vm.toDoList, "title", $event.target.value)
-                }
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "form-group" }, [
-            _c("textarea", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.toDoList.description,
-                  expression: "toDoList.description"
-                }
-              ],
-              staticClass: "form-control",
-              attrs: { type: "text", placeholder: "Description" },
-              domProps: { value: _vm.toDoList.description },
-              on: {
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
-                  }
-                  _vm.$set(_vm.toDoList, "description", $event.target.value)
-                }
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "form-group" }, [
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.toDoList.date_time,
-                  expression: "toDoList.date_time"
-                }
-              ],
-              staticClass: "form-control",
-              attrs: { type: "text", placeholder: "Date and Time" },
-              domProps: { value: _vm.toDoList.date_time },
-              on: {
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
-                  }
-                  _vm.$set(_vm.toDoList, "date_time", $event.target.value)
-                }
-              }
-            })
-          ]),
+  return _c("div", { staticClass: "container" }, [
+    _c("div", { staticClass: "row justify-content-center" }, [
+      _c("div", { staticClass: "col-md-8" }, [
+        _c("div", { staticClass: "card" }, [
+          _c("div", { staticClass: "card-header" }, [_vm._v("To do list")]),
           _vm._v(" "),
           _c(
-            "button",
-            {
-              staticClass: "btn btn-light btn-block",
-              attrs: { type: "submit" }
-            },
-            [_vm._v("Save")]
-          )
-        ]
-      ),
-      _vm._v(" "),
-      _vm._l(_vm.toDoLists, function(toDoList) {
-        return _c("div", { key: toDoList.id, staticClass: "card card-body" }, [
-          _c("h3", [_vm._v(_vm._s(toDoList.title))]),
-          _vm._v(" "),
-          _c("p", [_vm._v(_vm._s(toDoList.description))]),
-          _vm._v(" "),
-          _c("p", [_vm._v(_vm._s(toDoList.date_time))]),
-          _vm._v(" "),
-          _c("p", [_vm._v(_vm._s(toDoList.username))]),
-          _vm._v(" "),
-          _c("hr"),
-          _vm._v(" "),
-          _c(
-            "button",
-            {
-              staticClass: "btn btn-warning mb-2",
-              on: {
-                click: function($event) {
-                  return _vm.editToDoList(toDoList)
-                }
-              }
-            },
-            [_vm._v("\n            Edit\n        ")]
-          ),
-          _vm._v(" "),
-          _c(
-            "button",
-            {
-              staticClass: "btn btn-danger",
-              on: {
-                click: function($event) {
-                  return _vm.deleteToDoList(toDoList.id)
-                }
-              }
-            },
-            [_vm._v("\n            Delete\n        ")]
+            "div",
+            { staticClass: "card-body" },
+            [
+              _c(
+                "form",
+                {
+                  staticClass: "mb-3",
+                  on: {
+                    submit: function($event) {
+                      $event.preventDefault()
+                      return _vm.addToDoList($event)
+                    }
+                  }
+                },
+                [
+                  _c("div", { staticClass: "form-group" }, [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.toDoList.title,
+                          expression: "toDoList.title"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "text", placeholder: "Title" },
+                      domProps: { value: _vm.toDoList.title },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.toDoList, "title", $event.target.value)
+                        }
+                      }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-group" }, [
+                    _c("textarea", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.toDoList.description,
+                          expression: "toDoList.description"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "text", placeholder: "Description" },
+                      domProps: { value: _vm.toDoList.description },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.toDoList,
+                            "description",
+                            $event.target.value
+                          )
+                        }
+                      }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-group" }, [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.toDoList.date_time,
+                          expression: "toDoList.date_time"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "text", placeholder: "Date and Time" },
+                      domProps: { value: _vm.toDoList.date_time },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.toDoList,
+                            "date_time",
+                            $event.target.value
+                          )
+                        }
+                      }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-light btn-block",
+                      attrs: { type: "submit" }
+                    },
+                    [
+                      _vm._v(
+                        "\n                            Save\n                        "
+                      )
+                    ]
+                  )
+                ]
+              ),
+              _vm._v(" "),
+              _c("div", { staticClass: "card-header" }, [
+                _vm._v("To do lists:")
+              ]),
+              _vm._v(" "),
+              _vm._l(_vm.toDoLists, function(toDoList) {
+                return _c(
+                  "div",
+                  { key: toDoList.id, staticClass: "card card-body" },
+                  [
+                    _c("h4", [_vm._v(_vm._s(toDoList.title))]),
+                    _vm._v(" "),
+                    _c("p", [_vm._v(_vm._s(toDoList.description))]),
+                    _vm._v(" "),
+                    _c("p", [_vm._v(_vm._s(toDoList.date_time))]),
+                    _vm._v(" "),
+                    _c("p", [_vm._v(_vm._s(toDoList.username))]),
+                    _vm._v(" "),
+                    _c("hr"),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-warning mb-2",
+                        on: {
+                          click: function($event) {
+                            return _vm.editToDoList(toDoList)
+                          }
+                        }
+                      },
+                      [
+                        _vm._v(
+                          "\n                            Edit\n                        "
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-danger",
+                        on: {
+                          click: function($event) {
+                            return _vm.deleteToDoList(toDoList.id)
+                          }
+                        }
+                      },
+                      [
+                        _vm._v(
+                          "\n                            Delete\n                        "
+                        )
+                      ]
+                    )
+                  ]
+                )
+              })
+            ],
+            2
           )
         ])
-      })
-    ],
-    2
-  )
+      ])
+    ])
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -53514,11 +53834,6 @@ window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.
 
 Vue.component('app', __webpack_require__(/*! ./components/App.vue */ "./resources/js/components/App.vue")["default"]);
 /* Vue.component(
-    'navbar',
-    require('./components/NavBar.vue').default
-);
-
-Vue.component(
     'register',
     require('./components/Register.vue').default
 );
@@ -53739,15 +54054,17 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _NavBar_vue_vue_type_template_id_5dd24bca___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./NavBar.vue?vue&type=template&id=5dd24bca& */ "./resources/js/components/NavBar.vue?vue&type=template&id=5dd24bca&");
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* harmony import */ var _NavBar_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./NavBar.vue?vue&type=script&lang=js& */ "./resources/js/components/NavBar.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
-var script = {}
+
+
 
 
 /* normalize component */
 
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__["default"])(
-  script,
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _NavBar_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
   _NavBar_vue_vue_type_template_id_5dd24bca___WEBPACK_IMPORTED_MODULE_0__["render"],
   _NavBar_vue_vue_type_template_id_5dd24bca___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
@@ -53761,6 +54078,20 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 if (false) { var api; }
 component.options.__file = "resources/js/components/NavBar.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/NavBar.vue?vue&type=script&lang=js&":
+/*!*********************************************************************!*\
+  !*** ./resources/js/components/NavBar.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_NavBar_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./NavBar.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/NavBar.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_NavBar_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 

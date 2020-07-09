@@ -19,11 +19,9 @@
 
 <body>
     <div id="app">
-        <div class="container">
-            <app>
-                
-            </app>
-        </div>
+        <app>
+
+        </app>
     </div>
 </body>
 
